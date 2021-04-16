@@ -29,7 +29,10 @@ public class LutadorController {
 
     @GetMapping("/contagem-vivos")
     public ResponseEntity getContagemVivos() {
-        return ResponseEntity.status(200).body(1);
+        List<Lutador> lutadores = repository.findAll();
+
+        Long qtdVivos = lutadores.stream().filter(lutador -> lutador.isVivo()).count();
+        return ResponseEntity.status(200).body(qtdVivos);
     }
 
     // Criação de um lutador

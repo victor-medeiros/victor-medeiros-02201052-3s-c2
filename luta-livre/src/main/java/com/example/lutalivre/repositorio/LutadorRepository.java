@@ -8,6 +8,7 @@ import java.util.List;
 
 @Repository
 public interface LutadorRepository extends JpaRepository<Lutador, Integer> {
+//    public Integer countByVidaGreatherThan(Double vida);
 //    public List<Lutador> findByForcaGolpeGreatherThanOrderByForcaGolpeAsc(Double forcaGolpe);
 //    public List<Lutador> findByVivoTrue();
 }
