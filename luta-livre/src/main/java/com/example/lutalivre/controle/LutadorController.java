@@ -22,7 +22,7 @@ public class LutadorController {
     // Listando todos os lutadores
     @GetMapping
     public ResponseEntity getLutadores() {
-        List<Lutador> lutadores = repository.findAll();
+        List<Lutador> lutadores = repository.findAllByOrderByForcaGolpeAsc();
         if (lutadores.isEmpty()) return ResponseEntity.status(204).build();
         return ResponseEntity.status(200).body(lutadores);
     }
@@ -44,14 +44,14 @@ public class LutadorController {
 
     // Dando golpe em outro lutador
     @PostMapping("/golpe")
-    public ResponseEntity postGolpe(@RequestBody Integer idLutadorBate, @RequestBody Integer idLutadorApanha) {
+    public ResponseEntity postGolpe(@RequestBody int idLutadorBate, @RequestBody int idLutadorApanha) {
         Optional<Lutador> lutadorbate = repository.findById(idLutadorBate);
         Optional<Lutador> lutadorApanha = repository.findById(idLutadorApanha);
 
-        if (!lutadorbate.isPresent() || !lutadorApanha.isPresent()) {
-            return ResponseEntity.status(404).body("Ambos devem estar vivos");
-        }
-        lutadorApanha.get().setVida(lutadorbate.get().getForcaGolpe());
+//        if (!lutadorbate.isPresent() || !lutadorApanha.isPresent()) {
+//            return ResponseEntity.status(404).body("Ambos devem estar vivos");
+//        }
+//        lutadorApanha.get().setVida(lutadorbate.get().getForcaGolpe());
 
         List<Lutador> lutadores = new ArrayList<>();
         lutadores.add(lutadorbate.get());
