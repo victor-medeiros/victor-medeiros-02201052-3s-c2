@@ -44,14 +44,17 @@ public class LutadorController {
 
     // Dando golpe em outro lutador
     @PostMapping("/golpe")
-    public ResponseEntity postGolpe(@RequestBody int idLutadorBate, @RequestBody int idLutadorApanha) {
-        Optional<Lutador> lutadorbate = repository.findById(idLutadorBate);
-        Optional<Lutador> lutadorApanha = repository.findById(idLutadorApanha);
+    public ResponseEntity postGolpe(@RequestBody @Valid Golpe novoGolpe) {
+        Optional<Lutador> lutadorbate = repository.findById(novoGolpe.getIdLutadorBate());
+        System.out.println(repository.findById(novoGolpe.getIdLutadorBate()));
+        Optional<Lutador> lutadorApanha = repository.findById(novoGolpe.getIdLutadorApanha());
+        System.out.println(repository.findById(novoGolpe.getIdLutadorApanha()));
 
-//        if (!lutadorbate.isPresent() || !lutadorApanha.isPresent()) {
-//            return ResponseEntity.status(404).body("Ambos devem estar vivos");
-//        }
-//        lutadorApanha.get().setVida(lutadorbate.get().getForcaGolpe());
+        if (!lutadorbate.isPresent() || !lutadorApanha.isPresent()) {
+            return ResponseEntity.status(404).body("Ambos devem estar vivos");
+        }
+        lutadorApanha.get().setVida(lutadorbate.get().getForcaGolpe());
+        repository.save(lutadorApanha.get());
 
         List<Lutador> lutadores = new ArrayList<>();
         lutadores.add(lutadorbate.get());
@@ -68,6 +71,7 @@ public class LutadorController {
             return ResponseEntity.status(400).body("Lutador já se concentrou 3 vezes!");
         }
         lutador.get().setConcentracoesRealizadas();
-        return ResponseEntity.status(201).build();
+        repository.save(lutador.get());
+        return ResponseEntity.status(201).body(lutador.get());
     }
 }

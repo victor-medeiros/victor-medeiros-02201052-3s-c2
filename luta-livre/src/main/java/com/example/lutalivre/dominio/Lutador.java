@@ -77,7 +77,8 @@ public class Lutador {
 
     public void setConcentracoesRealizadas() {
         if (concentracoesRealizadas < 3) {
-            this.concentracoesRealizadas++;
+            this.concentracoesRealizadas = this.concentracoesRealizadas + 1;
+            System.out.println("incrementou");
         }
     }
 
