@@ -8,9 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/lutadores")
@@ -22,7 +22,7 @@ public class LutadorController {
     // Listando todos os lutadores
     @GetMapping
     public ResponseEntity getLutadores() {
-        List<Lutador> lutadores = repository.findAllByOrderByForcaGolpeAsc();
+        List<Lutador> lutadores = repository.findAllByOrderByForcaGolpeDesc();
         if (lutadores.isEmpty()) return ResponseEntity.status(204).build();
         return ResponseEntity.status(200).body(lutadores);
     }
@@ -33,6 +33,16 @@ public class LutadorController {
 
         Long qtdVivos = lutadores.stream().filter(lutador -> lutador.isVivo()).count();
         return ResponseEntity.status(200).body(qtdVivos);
+    }
+
+    @GetMapping("/mortos")
+    public ResponseEntity getMortos() {
+        List<Lutador> lutadores = repository.findAll();
+        List<Lutador> lutadoresMortos = lutadores.stream().filter(lutador -> !lutador.isVivo())
+                .collect(Collectors.toList());
+
+        if (lutadoresMortos.isEmpty()) return ResponseEntity.status(204).build();
+        return ResponseEntity.status(200).body(lutadoresMortos);
     }
 
     // Criação de um lutador
@@ -51,6 +61,10 @@ public class LutadorController {
         System.out.println(repository.findById(novoGolpe.getIdLutadorApanha()));
 
         if (!lutadorbate.isPresent() || !lutadorApanha.isPresent()) {
+            return ResponseEntity.status(404).body("Ambos IDs devem ser válidos");
+        }
+
+        if (!lutadorbate.get().isVivo() || !lutadorApanha.get().isVivo()) {
             return ResponseEntity.status(404).body("Ambos devem estar vivos");
         }
         lutadorApanha.get().setVida(lutadorbate.get().getForcaGolpe());

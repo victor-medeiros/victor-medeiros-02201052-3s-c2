@@ -67,7 +67,7 @@ public class Lutador {
         if ((this.vida - forcaGolpe) <= 0) {
             this.vida = 0.0;
         } else {
-            this.vida = vida;
+            this.vida -= forcaGolpe;
         }
     }
 
