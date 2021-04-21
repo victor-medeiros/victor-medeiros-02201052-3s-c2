@@ -12,11 +12,6 @@ public class Golpe {
     @NotNull
     private Integer idLutadorApanha;
 
-//    public Golpe(Lutador lutadorBatedor, Lutador lutadorAgredido) {
-//        this.idLutadorBate = lutadorBatedor.getId();
-//        this.idLutadorApanha = lutadorAgredido.getId();
-//    }
-
     public Integer getIdLutadorBate() {
         return idLutadorBate;
     }
